@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<meta charset="UTF-8" />
+		<title>Insert title here</title>
+	</h:head>
+	<body>
+		<h:form id="formtable">
+			<p:panel>
+				<p:dataTable value="#{clienteControl.getAll()}" var="umCliente" selectionMode="single" selection="#{clienteControl.model}" rowKey="#{umCliente.id}">
+					<p:column headerText="Nome">
+						<h:outputText value="#{umCliente.nome}" />
+					</p:column>
+					<p:column headerText="Data Nascimento">
+						<h:outputText value="#{umCliente.dataNascimento}" />
+					</p:column>
+					<f:facet name="footer">
+						<p:commandButton value="Incluir" id="cbIncluir" action="#{clienteControl.insert()}" update=":form:formDetail" oncomplete="PF('dlg1').show()" />
+						<p:commandButton value="Alterar" id="cbAlterar" update=":form:formDetail" oncomplete="PF('dlg1').show()" />
+						<p:commandButton value="Excluir" id="cbExcluir" oncomplete="PF('dlgremove').show()" />
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		<h:form id="form">
+			<p:dialog width="500" height="300" id="detailDialog" modal="true" header="Detalhe do Cliente" widgetVar="dlg1">
+				<h:panelGrid id="formDetail" columns="2">
+					<h:outputLabel name="lblNome" value="Nome" />
+					<p:inputText id="txtNome" label="lblNome" value="#{clienteControl.model.nome}" />
+					<h:outputLabel name="lblData" value="Data de Nascimento" />
+					<p:calendar id="txtDataNasc" showOn="button" value="#{clienteControl.model.dataNascimento}" />
+					<p:commandButton value="OK" action="#{clienteControl.save()}" update=":form:formDetail :formtable" onsuccess="PF('dlg1').hide()" />
+					<p:commandButton value="Cancelar" onsuccess="PF('dlg1').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+		<h:form id="formeremove">
+			<p:dialog width="320" height="100" id="removeDialog" modal="true" header="Confirma exclusão do Cliente?" widgetVar="dlgremove">
+				<h:panelGrid columns="2">
+					<p:commandButton value="OK" action="#{clienteControl.remove()}" update=":formtable" onsuccess="PF('dlgremove').hide()" />
+					<p:commandButton value="Cancelar" update=":formtable" onsuccess="PF('dlgremove').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</body>
+</html>
